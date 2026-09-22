@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label"
 
 import { optimizeEnergy } from "../services/api"
 import ResultSummary from "./ResultSummary"
+import EnergyChart from "./EnergyChart"
+import ScheduleTable from "./ScheduleTable"
 
 function OptimizerForm() {
     const [file, setFile] = useState(null)
@@ -161,6 +163,9 @@ function OptimizerForm() {
             {result && (
                 <div className="md:col-span-2">
                     <ResultSummary result={result} />
+                    <EnergyChart data={result.hourly_plan} />
+
+                    <ScheduleTable data={result.hourly_plan} />
                 </div>
             )}
 

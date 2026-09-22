@@ -17,32 +17,32 @@ A full-stack, AI-powered energy optimization system for university campuses. Upl
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              INPUT                                     │
-│  • CSV file (24 rows: demand, solar, tariff + battery specs)          │
-│  • Operator notes (optional, one per line)                            │
+│                              INPUT                                      │
+│  • CSV file (24 rows: demand, solar, tariff + battery specs)            │
+│  • Operator notes (optional, one per line)                              │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        PROCESSING PIPELINE                             │
-│                                                                        │
-│  • Frontend parses CSV with PapaParse → builds JSON payload            │
-│  • POST /optimize-energy → validaterequest.middleware.js               │
-│  • If operator notes exist → llm.js sends to OpenRouter API           │
-│  • LLM response validated by validator.js                              │
-│  • Directives decoded → constraints built (optimizer.js)               │
-│  • DP optimizer finds minimum-cost 24h plan (optimizer.js)             │
-│  • replay() validates the plan against all constraints                 │
+│                        PROCESSING PIPELINE                              │
+│                                                                         │
+│  • Frontend parses CSV with PapaParse → builds JSON payload             │
+│  • POST /optimize-energy → validaterequest.middleware.js                │
+│  • If operator notes exist → llm.js sends to OpenRouter API             │
+│  • LLM response validated by validator.js                               │
+│  • Directives decoded → constraints built (optimizer.js)                │
+│  • DP optimizer finds minimum-cost 24h plan (optimizer.js)              │
+│  • replay() validates the plan against all constraints                  │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              OUTPUT                                    │
-│  • hourly_plan: 24 entries (gridKwh, solarUsedKwh, batteryAction,      │
-│    batteryKwh, batteryEnergyAfterKwh)                                  │
-│  • total_grid_kwh, total_cost_bdt, peak_grid_kwh                       │
+│                              OUTPUT                                     │
+│  • hourly_plan: 24 entries (gridKwh, solarUsedKwh, batteryAction,       │
+│    batteryKwh, batteryEnergyAfterKwh)                                   │
+│  • total_grid_kwh, total_cost_bdt, peak_grid_kwh                        │
 │  • directive_interpretation: how each operator note was understood      │
-│  • plan_summary: human-readable description                            │
+│  • plan_summary: human-readable description                             │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 

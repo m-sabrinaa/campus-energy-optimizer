@@ -3,9 +3,15 @@ import dotenv from "dotenv";
 dotenv.config();
 import workflow from "./controller.js";
 import validateRequest from "./validaterequest.middleware.js";
+import cors from "cors"
 
 const app = express();
 app.use(express.json());
+
+app.use(cors())
+app.use(express.json())
+
+
 const port = process.env.PORT || 3000;
 
 app.get('/health',(req, res) => {

@@ -1,6 +1,12 @@
 import interpretNotes from "./llm.js";
 import validateDirective from "./validator.js";
-import { decodeDirective, buildConstraints, optimize, totals, replay } from "./optimizer.js";
+import {
+    decodeDirective,
+    buildConstraints,
+    optimize,
+    totals,
+    replay
+} from "./optimizer.js";
 
 const workflow = async (req, res) => {
     try {
@@ -16,19 +22,30 @@ const workflow = async (req, res) => {
             });
         }
 
-        const llm_response = await interpretNotes(req.body.operator_notes);
-        const clean_response = llm_response
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
+        // Default: no directives
+        let parsed_response = {
+            directives: []
+        };
 
-        const parsed_response = JSON.parse(clean_response);
-        // console.log(clean_response)
-        const isValid = validateDirective(parsed_response);
+        // Only call LLM if operator notes exist
+        if (
+            Array.isArray(req.body.operator_notes) &&
+            req.body.operator_notes.length > 0
+        ) {
+            const llm_response = await interpretNotes(req.body.operator_notes);
 
+            const clean_response = llm_response
+                .replace(/```json/g, "")
+                .replace(/```/g, "")
+                .trim();
 
-        if (!isValid) {
-            throw new Error("Invalid LLM directive");
+            parsed_response = JSON.parse(clean_response);
+
+            const isValid = validateDirective(parsed_response);
+
+            if (!isValid) {
+                throw new Error("Invalid LLM directive");
+            }
         }
 
         // Convert LLM directives
@@ -58,7 +75,12 @@ const workflow = async (req, res) => {
         const summary = totals(plan, req.body.hours);
 
         // Validate final plan
-        replay(plan, req.body.hours, req.body.battery, constraints);
+        replay(
+            plan,
+            req.body.hours,
+            req.body.battery,
+            constraints
+        );
 
         res.json({
             scenario_id: req.body.scenario_id,

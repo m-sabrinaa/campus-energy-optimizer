@@ -18,21 +18,21 @@ A full-stack, AI-powered energy optimization system for university campuses. Upl
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                              INPUT                                     │
-│  1. CSV file (24 rows: demand, solar, tariff + battery specs)          │
-│  2. Operator notes (optional, one per line)                            │
+│  • CSV file (24 rows: demand, solar, tariff + battery specs)          │
+│  • Operator notes (optional, one per line)                            │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                        PROCESSING PIPELINE                             │
 │                                                                        │
-│  ① Frontend parses CSV with PapaParse → builds JSON payload            │
-│  ② POST /optimize-energy → validaterequest.middleware.js               │
-│  ③ If operator notes exist → llm.js sends to OpenRouter API           │
-│  ④ LLM response validated by validator.js                              │
-│  ⑤ Directives decoded → constraints built (optimizer.js)               │
-│  ⑥ DP optimizer finds minimum-cost 24h plan (optimizer.js)             │
-│  ⑦ replay() validates the plan against all constraints                 │
+│  • Frontend parses CSV with PapaParse → builds JSON payload            │
+│  • POST /optimize-energy → validaterequest.middleware.js               │
+│  • If operator notes exist → llm.js sends to OpenRouter API           │
+│  • LLM response validated by validator.js                              │
+│  • Directives decoded → constraints built (optimizer.js)               │
+│  • DP optimizer finds minimum-cost 24h plan (optimizer.js)             │
+│  • replay() validates the plan against all constraints                 │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
@@ -156,15 +156,6 @@ cd client
 npm install
 npm run dev
 ```
-
----
-
-## How to Test
-
-1. Open `http://localhost:5173` in your browser.
-2. Upload the included [`campus_energy_data.csv`](./campus_energy_data.csv) sample file.
-3. *(Optional)* Enter an operator note (e.g., *"Reduce solar by 80% from 11 AM to 1 PM"*).
-4. Click **Optimize Energy** to view the summary metrics, interactive energy chart, and hourly schedule.
 
 ---
 
